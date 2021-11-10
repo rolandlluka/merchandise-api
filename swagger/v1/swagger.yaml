@@ -1,0 +1,104 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+components:
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header
+paths:
+  "/api/admin/products":
+    get:
+      summary: Retrieves all products
+      tags:
+      - Products
+      security:
+      - Authorization: []
+      responses:
+        '200':
+          description: users retrieved
+        '404':
+          description: users not found
+        '401':
+          description: Missing token
+    post:
+      summary: Creates a product
+      tags:
+      - Products
+      security:
+      - Authorization: []
+      parameters: []
+      responses:
+        '201':
+          description: product created
+        '422':
+          description: invalid request
+        '401':
+          description: Missing token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                code:
+                  type: string
+              required:
+              - name
+              - price
+  "/api/admin/products/{product_id}":
+    put:
+      summary: Updates a product
+      tags:
+      - Products
+      security:
+      - Authorization: []
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: product updated
+        '422':
+          description: invalid request
+        '401':
+          description: Missing token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                price:
+                  type: number
+              required:
+              - price
+  "/api/admin/users":
+    get:
+      summary: Retrieves all users
+      tags:
+      - Users
+      security:
+      - Authorization: []
+      responses:
+        '200':
+          description: users retrieved
+        '404':
+          description: users not found
+        '401':
+          description: Missing token
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000
