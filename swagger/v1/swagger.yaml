@@ -12,7 +12,7 @@ components:
 paths:
   "/api/admin/products":
     get:
-      summary: Retrieves all products
+      summary: "Retrieves all products. Admin only \U0001F512"
       tags:
       - Products
       security:
@@ -25,7 +25,7 @@ paths:
         '401':
           description: Missing token
     post:
-      summary: Creates a product
+      summary: "Creates a product. Admin only \U0001F512"
       tags:
       - Products
       security:
@@ -55,7 +55,7 @@ paths:
               - price
   "/api/admin/products/{product_id}":
     put:
-      summary: Updates a product
+      summary: "Updates a product. Admin only \U0001F512"
       tags:
       - Products
       security:
@@ -83,9 +83,47 @@ paths:
                   type: number
               required:
               - price
+  "/api/admin/products/show_items_price":
+    get:
+      summary: Retrieves total price for a list of products.
+      tags:
+      - Products
+      description: |
+        ## Description
+        Please use one of the predefined products: MUG, TSHIRT, HOODIE
+      parameters:
+      - name: items[]
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            nullable: true
+            description: Kind of items
+            example: MUG
+      responses:
+        '200':
+          description: prices retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Items:
+                    type: object
+                  Total:
+                    type: string
+                required:
+                - Items
+                - Total
+        '404':
+          description: price not found
+        '400':
+          description: bad request
   "/api/admin/users":
     get:
-      summary: Retrieves all users
+      summary: "Retrieves all users. Admin only \U0001F512"
       tags:
       - Users
       security:

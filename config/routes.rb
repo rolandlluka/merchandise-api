@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :admin do
       resources :users, only: [:index]
-      resources :products
+      resources :products do
+        collection do
+          get :show_items_price
+        end
+      end
     end
   end
 end

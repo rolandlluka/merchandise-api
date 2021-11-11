@@ -1,7 +1,7 @@
 module Api
   module Admin
     class ProductsController < Api::BaseController
-      before_action :authenticate
+      before_action :authenticate, except: %i[show_items_price]
       before_action :set_product, only: %i[show update destroy]
 
       # GET /products
@@ -40,6 +40,17 @@ module Api
       # DELETE /products/1
       def destroy
         @product.destroy
+      end
+
+      def show_items_price
+        items = params[:items].map(&:upcase)
+        calculation = CalculatePrice.new(items)
+
+        if calculation.validate
+          render json: { Items: items, Total: calculation.total }, status: 200
+        else
+          render json: { errors: [{ source: 'items[]', title: 'Not found' }] }, status: :bad_request
+        end
       end
 
       private
