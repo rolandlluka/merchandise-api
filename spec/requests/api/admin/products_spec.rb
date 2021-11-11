@@ -30,12 +30,16 @@ RSpec.describe '/products', type: :request do
     { code: 'MUG', name: 'test' }
   end
 
+  let(:valid_price_params) do
+    { items: ['MUG'] }
+  end
+
   # This should return the minimal set of values that should be in the headers
   # in order to pass any filters (e.g. authentication) defined in
   # ProductsController, or in your router and rack
   # middleware. Be sure to keep this updated too.
   let(:valid_headers) do
-    { "Authorization" => user.token, 'Content-Type' => 'application/json' }
+    { 'Authorization' => user.token, 'Content-Type' => 'application/json' }
   end
 
   describe 'GET /index' do
@@ -118,6 +122,14 @@ RSpec.describe '/products', type: :request do
       expect do
         delete api_admin_product_url(product), headers: valid_headers, as: :json
       end.to change(Product, :count).by(-1)
+    end
+  end
+
+  describe 'GET /show_items_price' do
+    it 'renders a successful response' do
+      Product.create! valid_attributes
+      get show_items_price_api_admin_products_path(valid_price_params), as: :json
+      expect(response).to be_successful
     end
   end
 end
